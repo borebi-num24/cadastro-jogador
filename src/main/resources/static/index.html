@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD de Jogadores</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+            margin: 0;
+            padding: 30px 16px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #0f172a;
+        }
+
+        .subtitulo {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 24px;
+            margin-bottom: 24px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #0000000d;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        .formulario {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .campo {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 15px;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: 2px solid #93c5fd;
+            border-color: #2563eb;
+        }
+
+        .botoes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        button {
+            border: none;
+            border-radius: 7px;
+            padding: 11px 16px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            background: #2563eb;
+        }
+
+        button:hover {
+            filter: brightness(0.92);
+        }
+
+        .secundario {
+            background: #64748b;
+        }
+
+        .editar {
+            background: #d97706;
+        }
+
+        .excluir {
+            background: #dc2626;
+        }
+
+        .busca {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .busca input {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .tabela-container {
+            overflow-x: auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 850px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #334155;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        td button {
+            padding: 8px 10px;
+            margin: 2px;
+        }
+
+        #mensagem {
+            display: none;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        #mensagem.sucesso {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        #mensagem.erro {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .vazio {
+            text-align: center;
+            color: #64748b;
+            padding: 25px;
+        }
+
+        @media (max-width: 600px) {
+            .formulario {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 16px;
+            }
+
+            .busca {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <h1>Cadastro de Jogadores</h1>
+    <p class="subtitulo">Gerencie os jogadores cadastrados no sistema</p>
+
+    <div id="mensagem" role="status"></div>
+
+    <section class="card">
+        <h2 id="tituloFormulario">Cadastrar jogador</h2>
+
+        <form id="formJogador">
+            <input type="hidden" id="id">
+
+            <div class="formulario">
+                <div class="campo">
+                    <label for="nome">Nome completo</label>
+                    <input id="nome" type="text" maxlength="100"
+                           placeholder="Ex.: Neymar" required>
+                </div>
+
+                <div class="campo">
+                    <label for="posicao">Posição</label>
+                    <select id="posicao" required>
+                        <option value="">Selecione</option>
+                        <option value="GOLEIRO">Goleiro</option>
+                        <option value="ZAGUEIRO">Zagueiro</option>
+                        <option value="LATERAL">Lateral</option>
+                        <option value="VOLANTE">Volante</option>
+                        <option value="MEIA">Meia</option>
+                        <option value="ATACANTE">Atacante</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="numeroCamisa">Número da camisa</label>
+                    <input id="numeroCamisa" type="number"
+                           min="1" max="99" required>
+                </div>
+
+                <div class="campo">
+                    <label for="dataNascimento">Data de nascimento</label>
+                    <input id="dataNascimento" type="date" required>
+                </div>
+
+                <div class="campo">
+                    <label for="nacionalidade">Nacionalidade</label>
+                    <input id="nacionalidade" type="text"
+                           maxlength="60" placeholder="Ex.: Brasileira">
+                </div>
+            </div>
+
+            <div class="botoes">
+                <button type="submit" id="btnSalvar">Cadastrar jogador</button>
+                <button type="button" class="secundario"
+                        onclick="limparFormulario()">Limpar</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>Jogadores cadastrados</h2>
+
+        <div class="busca">
+            <input type="number" id="buscaId"
+                   placeholder="Buscar jogador pelo ID">
+            <button type="button" onclick="buscarPorId()">Buscar</button>
+            <button type="button" class="secundario"
+                    onclick="carregarJogadores()">Listar todos</button>
+        </div>
+
+        <div class="tabela-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Posição</th>
+                    <th>Camisa</th>
+                    <th>Nascimento</th>
+                    <th>Nacionalidade</th>
+                    <th>Ações</th>
+                </tr>
+                </thead>
+                <tbody id="listaJogadores">
+                <tr>
+                    <td colspan="7" class="vazio">Carregando jogadores...</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+
+<script>
+    const API = "/jogador";
+
+    const form = document.getElementById("formJogador");
+    const tabela = document.getElementById("listaJogadores");
+    const mensagem = document.getElementById("mensagem");
+
+    function mostrarMensagem(texto, tipo = "sucesso") {
+        mensagem.textContent = texto;
+        mensagem.className = tipo;
+
+        setTimeout(() => {
+            mensagem.style.display = "none";
+        }, 4500);
+
+        mensagem.style.display = "block";
+    }
+
+    async function requisicao(url, opcoes = {}) {
+        const resposta = await fetch(url, {
+            ...opcoes,
+            headers: {
+                ...(opcoes.body ? {
+                    "Content-Type": "application/json"
+                } : {}),
+                ...opcoes.headers
+            }
+        });
+
+        if (!resposta.ok) {
+            const detalhe = await resposta.text();
+            throw new Error(detalhe || `Erro HTTP ${resposta.status}`);
+        }
+
+        if (resposta.status === 204) {
+            return null;
+        }
+
+        return resposta.json();
+    }
+
+    async function carregarJogadores() {
+        try {
+            const jogadores = await requisicao(API);
+            renderizarJogadores(jogadores);
+        } catch (erro) {
+            mostrarMensagem(
+                "Não foi possível carregar os jogadores. " + erro.message,
+                "erro"
+            );
+        }
+    }
+
+    function renderizarJogadores(jogadores) {
+        tabela.replaceChildren();
+
+        if (!Array.isArray(jogadores) || jogadores.length === 0) {
+            const linha = document.createElement("tr");
+            const celula = document.createElement("td");
+
+            celula.colSpan = 7;
+            celula.className = "vazio";
+            celula.textContent = "Nenhum jogador encontrado.";
+
+            linha.appendChild(celula);
+            tabela.appendChild(linha);
+            return;
+        }
+
+        jogadores.forEach(jogador => {
+            const linha = document.createElement("tr");
+
+            const valores = [
+                jogador.id,
+                jogador.nome,
+                jogador.posicao,
+                jogador.numeroCamisa,
+                jogador.dataNascimento,
+                jogador.nacionalidade || "-"
+            ];
+
+            valores.forEach(valor => {
+                const celula = document.createElement("td");
+                celula.textContent = valor ?? "-";
+                linha.appendChild(celula);
+            });
+
+            const acoes = document.createElement("td");
+
+            const btnEditar = document.createElement("button");
+            btnEditar.textContent = "Editar";
+            btnEditar.className = "editar";
+            btnEditar.addEventListener("click", () => editarJogador(jogador));
+
+            const btnExcluir = document.createElement("button");
+            btnExcluir.textContent = "Excluir";
+            btnExcluir.className = "excluir";
+            btnExcluir.addEventListener("click", () => excluirJogador(jogador.id));
+
+            acoes.append(btnEditar, btnExcluir);
+            linha.appendChild(acoes);
+            tabela.appendChild(linha);
+        });
+    }
+
+    form.addEventListener("submit", async evento => {
+        evento.preventDefault();
+
+        const id = document.getElementById("id").value;
+
+        const dados = {
+            nome: document.getElementById("nome").value.trim(),
+            posicao: document.getElementById("posicao").value,
+            numeroCamisa: Number(document.getElementById("numeroCamisa").value),
+            dataNascimento: document.getElementById("dataNascimento").value,
+            nacionalidade: document.getElementById("nacionalidade").value.trim() || null
+        };
+
+        try {
+            if (id) {
+                await requisicao(`${API}/${id}`, {
+                    method: "PUT",
+                    body: JSON.stringify(dados)
+                });
+
+                mostrarMensagem("Jogador atualizado com sucesso!");
+            } else {
+                await requisicao(API, {
+                    method: "POST",
+                    body: JSON.stringify(dados)
+                });
+
+                mostrarMensagem("Jogador cadastrado com sucesso!");
+            }
+
+            limparFormulario();
+            await carregarJogadores();
+        } catch (erro) {
+            mostrarMensagem(
+                "Não foi possível salvar. Verifique os dados. " + erro.message,
+                "erro"
+            );
+        }
+    });
+
+    function editarJogador(jogador) {
+        document.getElementById("id").value = jogador.id;
+        document.getElementById("nome").value = jogador.nome;
+        document.getElementById("posicao").value = jogador.posicao;
+        document.getElementById("numeroCamisa").value = jogador.numeroCamisa;
+        document.getElementById("dataNascimento").value = jogador.dataNascimento;
+        document.getElementById("nacionalidade").value = jogador.nacionalidade || "";
+
+        document.getElementById("tituloFormulario").textContent =
+            "Editar jogador #" + jogador.id;
+
+        document.getElementById("btnSalvar").textContent = "Salvar alterações";
+
+        document.getElementById("nome").focus();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function limparFormulario() {
+        form.reset();
+        document.getElementById("id").value = "";
+
+        document.getElementById("tituloFormulario").textContent =
+            "Cadastrar jogador";
+
+        document.getElementById("btnSalvar").textContent = "Cadastrar jogador";
+    }
+
+    async function buscarPorId() {
+        const id = document.getElementById("buscaId").value.trim();
+
+        if (!id || Number(id) <= 0) {
+            mostrarMensagem("Informe um ID válido.", "erro");
+            return;
+        }
+
+        try {
+            const jogador = await requisicao(`${API}/${id}`);
+            renderizarJogadores([jogador]);
+        } catch (erro) {
+            renderizarJogadores([]);
+            mostrarMensagem("Jogador não encontrado.", "erro");
+        }
+    }
+
+    async function excluirJogador(id) {
+        if (!confirm(`Deseja realmente excluir o jogador de ID ${id}?`)) {
+            return;
+        }
+
+        try {
+            await requisicao(`${API}/${id}`, { method: "DELETE" });
+            mostrarMensagem("Jogador excluído com sucesso!");
+            await carregarJogadores();
+        } catch (erro) {
+            mostrarMensagem("Não foi possível excluir. " + erro.message, "erro");
+        }
+    }
+
+    carregarJogadores();
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+### Cadastrar jogador (CREATE)
+POST http://localhost:8080/jogador
+Content-Type: application/json
+
+{
+  "nome": "Rodrygo",
+  "posicao": "ATACANTE",
+  "numeroCamisa": 21,
+  "dataNascimento": "2001-01-09",
+  "nacionalidade": "Brasileira"
+}
+
+### Listar todos (READ)
+GET http://localhost:8080/jogador
+
+### Filtrar por nome e/ou posição
+GET http://localhost:8080/jogador?nome=pel&posicao=ATACANTE
+
+### Buscar por id
+GET http://localhost:8080/jogador/1
+
+### Atualizar (UPDATE) - note o @JsonAlias: numero_camisa e data_nascimento também funcionam
+PUT http://localhost:8080/jogador/1
+Content-Type: application/json
+
+{
+  "nome": "Pelé",
+  "posicao": "ATACANTE",
+  "numero_camisa": 10,
+  "data_nascimento": "1940-10-23",
+  "nacionalidade": "Brasileira"
+}
+
+### Atualização PARCIAL (PATCH): muda só a posição; nome, camisa etc. continuam como estavam
+PATCH http://localhost:8080/jogador/1
+Content-Type: application/json
+
+{ "posicao": "MEIA" }
+
+### Buscar pelo número da camisa (campo único)
+GET http://localhost:8080/jogador/camisa/10
+
+### Deletar (DELETE) por id
+DELETE http://localhost:8080/jogador/1
+
+### Deletar por número da camisa
+DELETE http://localhost:8080/jogador/camisa/11
+
+### Erro de validação (esperado: 400)
+POST http://localhost:8080/jogador
+Content-Type: application/json
+
+{ "nome": "", "numeroCamisa": 150 }
+
+### Camisa repetida (esperado: 409)
+POST http://localhost:8080/jogador
+Content-Type: application/json
+
+{ "nome": "Outro", "posicao": "MEIA", "numeroCamisa": 10, "dataNascimento": "1999-05-01" }
