@@ -3,221 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUD de Jogadores</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background: #f1f5f9;
-            color: #1e293b;
-            margin: 0;
-            padding: 30px 16px;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: auto;
-        }
-
-        h1 {
-            text-align: center;
-            color: #0f172a;
-        }
-
-        .subtitulo {
-            text-align: center;
-            color: #64748b;
-            margin-bottom: 30px;
-        }
-
-        .card {
-            background: white;
-            padding: 24px;
-            margin-bottom: 24px;
-            border-radius: 12px;
-            box-shadow: 0 3px 12px #0000000d;
-        }
-
-        h2 {
-            margin-top: 0;
-            font-size: 20px;
-        }
-
-        .formulario {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 16px;
-        }
-
-        .campo {
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-        }
-
-        label {
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 11px;
-            border: 1px solid #cbd5e1;
-            border-radius: 7px;
-            font-size: 15px;
-            background: white;
-        }
-
-        input:focus, select:focus {
-            outline: 2px solid #93c5fd;
-            border-color: #2563eb;
-        }
-
-        .botoes {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 18px;
-        }
-
-        button {
-            border: none;
-            border-radius: 7px;
-            padding: 11px 16px;
-            cursor: pointer;
-            font-weight: bold;
-            color: white;
-            background: #2563eb;
-        }
-
-        button:hover {
-            filter: brightness(0.92);
-        }
-
-        .secundario {
-            background: #64748b;
-        }
-
-        .editar {
-            background: #d97706;
-        }
-
-        .excluir {
-            background: #dc2626;
-        }
-
-        .busca {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 18px;
-        }
-
-        .busca input {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .tabela-container {
-            overflow-x: auto;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            min-width: 850px;
-        }
-
-        th, td {
-            text-align: left;
-            padding: 12px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        th {
-            background: #f8fafc;
-            color: #334155;
-        }
-
-        tr:hover td {
-            background: #f8fafc;
-        }
-
-        td button {
-            padding: 8px 10px;
-            margin: 2px;
-        }
-
-        #mensagem {
-            display: none;
-            padding: 12px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-        }
-
-        #mensagem.sucesso {
-            display: block;
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        #mensagem.erro {
-            display: block;
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .vazio {
-            text-align: center;
-            color: #64748b;
-            padding: 25px;
-        }
-
-        @media (max-width: 600px) {
-            .formulario {
-                grid-template-columns: 1fr;
-            }
-
-            .card {
-                padding: 16px;
-            }
-
-            .busca {
-                flex-wrap: wrap;
-            }
-        }
-    </style>
+    <meta name="theme-color" content="#101827">
+    <title>Scout | Cadastro de Jogadores</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/app.js" defer></script>
 </head>
-
 <body>
-<div class="container">
+<header class="topbar">
+    <a class="brand" href="/" aria-label="Scout - início">
+        <span class="brand-mark">S</span>
+        <span>SCOUT<span class="brand-dot">.</span></span>
+    </a>
+    <span class="topbar-label">GESTÃO DE ELENCO</span>
+    <span class="api-status"><i></i> API Spring Boot</span>
+</header>
 
-    <h1>Cadastro de Jogadores</h1>
-    <p class="subtitulo">Gerencie os jogadores cadastrados no sistema</p>
+<main class="container">
+    <section class="hero">
+        <div>
+            <p class="eyebrow">PAINEL ADMINISTRATIVO</p>
+            <h1>Cadastro de <span>jogadores</span></h1>
+            <p class="hero-description">Gerencie seu elenco, consulte informações e mantenha os dados atualizados.</p>
+        </div>
+        <div class="hero-ball" aria-hidden="true">⚽</div>
+    </section>
 
-    <div id="mensagem" role="status"></div>
+    <div id="mensagem" class="message" role="status" aria-live="polite"></div>
 
-    <section class="card">
-        <h2 id="tituloFormulario">Cadastrar jogador</h2>
+    <section class="stats-grid" aria-label="Resumo do elenco">
+        <article class="stat-card">
+            <span class="stat-label">JOGADORES CADASTRADOS</span>
+            <strong id="totalJogadores">—</strong>
+            <span class="stat-foot">Registros no sistema</span>
+        </article>
+        <article class="stat-card">
+            <span class="stat-label">GOLEIROS</span>
+            <strong id="totalGoleiros">—</strong>
+            <span class="stat-foot">Posição no elenco</span>
+        </article>
+        <article class="stat-card">
+            <span class="stat-label">ATACANTES</span>
+            <strong id="totalAtacantes">—</strong>
+            <span class="stat-foot">Posição no elenco</span>
+        </article>
+    </section>
+
+    <section class="panel">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">NOVO REGISTRO</p>
+                <h2 id="tituloFormulario">Adicionar jogador</h2>
+            </div>
+            <span class="section-icon">＋</span>
+        </div>
 
         <form id="formJogador">
             <input type="hidden" id="id">
-
-            <div class="formulario">
-                <div class="campo">
-                    <label for="nome">Nome completo</label>
-                    <input id="nome" type="text" maxlength="100"
-                           placeholder="Ex.: Neymar" required>
-                </div>
-
-                <div class="campo">
-                    <label for="posicao">Posição</label>
+            <div class="form-grid">
+                <label class="field field-wide">Nome completo
+                    <input id="nome" type="text" maxlength="100" placeholder="Ex.: Neymar Jr." required>
+                </label>
+                <label class="field">Posição
                     <select id="posicao" required>
-                        <option value="">Selecione</option>
+                        <option value="">Selecione a posição</option>
                         <option value="GOLEIRO">Goleiro</option>
                         <option value="ZAGUEIRO">Zagueiro</option>
                         <option value="LATERAL">Lateral</option>
@@ -225,273 +73,133 @@
                         <option value="MEIA">Meia</option>
                         <option value="ATACANTE">Atacante</option>
                     </select>
-                </div>
-
-                <div class="campo">
-                    <label for="numeroCamisa">Número da camisa</label>
-                    <input id="numeroCamisa" type="number"
-                           min="1" max="99" required>
-                </div>
-
-                <div class="campo">
-                    <label for="dataNascimento">Data de nascimento</label>
+                </label>
+                <label class="field">Número da camisa
+                    <input id="numeroCamisa" type="number" min="1" max="99" placeholder="Ex.: 10" required>
+                </label>
+                <label class="field">Data de nascimento
                     <input id="dataNascimento" type="date" required>
-                </div>
-
-                <div class="campo">
-                    <label for="nacionalidade">Nacionalidade</label>
-                    <input id="nacionalidade" type="text"
-                           maxlength="60" placeholder="Ex.: Brasileira">
-                </div>
+                </label>
+                <label class="field">Nacionalidade
+                    <input id="nacionalidade" type="text" maxlength="60" placeholder="Ex.: Brasileira">
+                </label>
             </div>
-
-            <div class="botoes">
-                <button type="submit" id="btnSalvar">Cadastrar jogador</button>
-                <button type="button" class="secundario"
-                        onclick="limparFormulario()">Limpar</button>
+            <div class="form-actions">
+                <button class="button button-primary" id="btnSalvar" type="submit">Cadastrar jogador</button>
+                <button class="button button-ghost" id="btnLimpar" type="button">Limpar campos</button>
+                <span class="form-hint">O número da camisa deve ser único.</span>
             </div>
         </form>
     </section>
 
-    <section class="card">
-        <h2>Jogadores cadastrados</h2>
-
-        <div class="busca">
-            <input type="number" id="buscaId"
-                   placeholder="Buscar jogador pelo ID">
-            <button type="button" onclick="buscarPorId()">Buscar</button>
-            <button type="button" class="secundario"
-                    onclick="carregarJogadores()">Listar todos</button>
+    <section class="panel">
+        <div class="section-heading section-heading-wrap">
+            <div>
+                <p class="eyebrow">BASE DE DADOS</p>
+                <h2>Elenco cadastrado</h2>
+            </div>
+            <button class="button button-ghost button-small" id="btnAtualizar" type="button">↻ Atualizar lista</button>
         </div>
 
-        <div class="tabela-container">
+        <form id="formFiltros" class="filters">
+            <label class="field">ID
+                <input id="filtroId" type="number" min="1" placeholder="Qualquer">
+            </label>
+            <label class="field">Nome
+                <input id="filtroNome" type="text" placeholder="Buscar nome">
+            </label>
+            <label class="field">Posição
+                <select id="filtroPosicao">
+                    <option value="">Todas</option>
+                    <option value="GOLEIRO">Goleiro</option>
+                    <option value="ZAGUEIRO">Zagueiro</option>
+                    <option value="LATERAL">Lateral</option>
+                    <option value="VOLANTE">Volante</option>
+                    <option value="MEIA">Meia</option>
+                    <option value="ATACANTE">Atacante</option>
+                </select>
+            </label>
+            <label class="field">Camisa
+                <input id="filtroCamisa" type="number" min="1" max="99" placeholder="Qualquer">
+            </label>
+            <div class="filter-actions">
+                <button class="button button-primary" type="submit">Filtrar</button>
+                <button class="button button-ghost" id="btnLimparFiltros" type="button">Limpar</button>
+            </div>
+        </form>
+
+        <div class="quick-search">
+            <form id="formBuscaId" class="quick-form">
+                <label class="sr-only" for="buscaId">Buscar jogador por ID</label>
+                <input id="buscaId" type="number" min="1" placeholder="Buscar diretamente por ID">
+                <button class="button button-outline" type="submit">Buscar por ID</button>
+            </form>
+            <form id="formBuscaCamisa" class="quick-form">
+                <label class="sr-only" for="buscaCamisa">Buscar jogador por camisa</label>
+                <input id="buscaCamisa" type="number" min="1" max="99" placeholder="Número da camisa">
+                <button class="button button-outline" type="submit">Buscar por camisa</button>
+            </form>
+            <form id="formExcluirCamisa" class="quick-form quick-delete">
+                <label class="sr-only" for="excluirCamisa">Excluir jogador por camisa</label>
+                <input id="excluirCamisa" type="number" min="1" max="99" placeholder="Camisa para excluir">
+                <button class="button button-danger-outline" type="submit">Excluir por camisa</button>
+            </form>
+        </div>
+
+        <div class="table-wrap">
             <table>
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Posição</th>
-                    <th>Camisa</th>
-                    <th>Nascimento</th>
-                    <th>Nacionalidade</th>
-                    <th>Ações</th>
+                    <th>ID</th><th>JOGADOR</th><th>POSIÇÃO</th><th>CAMISA</th>
+                    <th>NASCIMENTO</th><th>NACIONALIDADE</th><th>AÇÕES</th>
                 </tr>
                 </thead>
                 <tbody id="listaJogadores">
-                <tr>
-                    <td colspan="7" class="vazio">Carregando jogadores...</td>
-                </tr>
+                <tr><td colspan="7" class="empty-state">Carregando jogadores...</td></tr>
                 </tbody>
             </table>
         </div>
+        <p class="table-note"><span id="quantidadeExibida">0 jogadores</span><span>Dados fornecidos pela API Java</span></p>
     </section>
 
-</div>
+    <footer>SCOUT <span>•</span> Sistema de gerenciamento de jogadores</footer>
+</main>
 
-<script>
-    const API = "/jogador";
-
-    const form = document.getElementById("formJogador");
-    const tabela = document.getElementById("listaJogadores");
-    const mensagem = document.getElementById("mensagem");
-
-    function mostrarMensagem(texto, tipo = "sucesso") {
-        mensagem.textContent = texto;
-        mensagem.className = tipo;
-
-        setTimeout(() => {
-            mensagem.style.display = "none";
-        }, 4500);
-
-        mensagem.style.display = "block";
-    }
-
-    async function requisicao(url, opcoes = {}) {
-        const resposta = await fetch(url, {
-            ...opcoes,
-            headers: {
-                ...(opcoes.body ? {
-                    "Content-Type": "application/json"
-                } : {}),
-                ...opcoes.headers
-            }
-        });
-
-        if (!resposta.ok) {
-            const detalhe = await resposta.text();
-            throw new Error(detalhe || `Erro HTTP ${resposta.status}`);
-        }
-
-        if (resposta.status === 204) {
-            return null;
-        }
-
-        return resposta.json();
-    }
-
-    async function carregarJogadores() {
-        try {
-            const jogadores = await requisicao(API);
-            renderizarJogadores(jogadores);
-        } catch (erro) {
-            mostrarMensagem(
-                "Não foi possível carregar os jogadores. " + erro.message,
-                "erro"
-            );
-        }
-    }
-
-    function renderizarJogadores(jogadores) {
-        tabela.replaceChildren();
-
-        if (!Array.isArray(jogadores) || jogadores.length === 0) {
-            const linha = document.createElement("tr");
-            const celula = document.createElement("td");
-
-            celula.colSpan = 7;
-            celula.className = "vazio";
-            celula.textContent = "Nenhum jogador encontrado.";
-
-            linha.appendChild(celula);
-            tabela.appendChild(linha);
-            return;
-        }
-
-        jogadores.forEach(jogador => {
-            const linha = document.createElement("tr");
-
-            const valores = [
-                jogador.id,
-                jogador.nome,
-                jogador.posicao,
-                jogador.numeroCamisa,
-                jogador.dataNascimento,
-                jogador.nacionalidade || "-"
-            ];
-
-            valores.forEach(valor => {
-                const celula = document.createElement("td");
-                celula.textContent = valor ?? "-";
-                linha.appendChild(celula);
-            });
-
-            const acoes = document.createElement("td");
-
-            const btnEditar = document.createElement("button");
-            btnEditar.textContent = "Editar";
-            btnEditar.className = "editar";
-            btnEditar.addEventListener("click", () => editarJogador(jogador));
-
-            const btnExcluir = document.createElement("button");
-            btnExcluir.textContent = "Excluir";
-            btnExcluir.className = "excluir";
-            btnExcluir.addEventListener("click", () => excluirJogador(jogador.id));
-
-            acoes.append(btnEditar, btnExcluir);
-            linha.appendChild(acoes);
-            tabela.appendChild(linha);
-        });
-    }
-
-    form.addEventListener("submit", async evento => {
-        evento.preventDefault();
-
-        const id = document.getElementById("id").value;
-
-        const dados = {
-            nome: document.getElementById("nome").value.trim(),
-            posicao: document.getElementById("posicao").value,
-            numeroCamisa: Number(document.getElementById("numeroCamisa").value),
-            dataNascimento: document.getElementById("dataNascimento").value,
-            nacionalidade: document.getElementById("nacionalidade").value.trim() || null
-        };
-
-        try {
-            if (id) {
-                await requisicao(`${API}/${id}`, {
-                    method: "PUT",
-                    body: JSON.stringify(dados)
-                });
-
-                mostrarMensagem("Jogador atualizado com sucesso!");
-            } else {
-                await requisicao(API, {
-                    method: "POST",
-                    body: JSON.stringify(dados)
-                });
-
-                mostrarMensagem("Jogador cadastrado com sucesso!");
-            }
-
-            limparFormulario();
-            await carregarJogadores();
-        } catch (erro) {
-            mostrarMensagem(
-                "Não foi possível salvar. Verifique os dados. " + erro.message,
-                "erro"
-            );
-        }
-    });
-
-    function editarJogador(jogador) {
-        document.getElementById("id").value = jogador.id;
-        document.getElementById("nome").value = jogador.nome;
-        document.getElementById("posicao").value = jogador.posicao;
-        document.getElementById("numeroCamisa").value = jogador.numeroCamisa;
-        document.getElementById("dataNascimento").value = jogador.dataNascimento;
-        document.getElementById("nacionalidade").value = jogador.nacionalidade || "";
-
-        document.getElementById("tituloFormulario").textContent =
-            "Editar jogador #" + jogador.id;
-
-        document.getElementById("btnSalvar").textContent = "Salvar alterações";
-
-        document.getElementById("nome").focus();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function limparFormulario() {
-        form.reset();
-        document.getElementById("id").value = "";
-
-        document.getElementById("tituloFormulario").textContent =
-            "Cadastrar jogador";
-
-        document.getElementById("btnSalvar").textContent = "Cadastrar jogador";
-    }
-
-    async function buscarPorId() {
-        const id = document.getElementById("buscaId").value.trim();
-
-        if (!id || Number(id) <= 0) {
-            mostrarMensagem("Informe um ID válido.", "erro");
-            return;
-        }
-
-        try {
-            const jogador = await requisicao(`${API}/${id}`);
-            renderizarJogadores([jogador]);
-        } catch (erro) {
-            renderizarJogadores([]);
-            mostrarMensagem("Jogador não encontrado.", "erro");
-        }
-    }
-
-    async function excluirJogador(id) {
-        if (!confirm(`Deseja realmente excluir o jogador de ID ${id}?`)) {
-            return;
-        }
-
-        try {
-            await requisicao(`${API}/${id}`, { method: "DELETE" });
-            mostrarMensagem("Jogador excluído com sucesso!");
-            await carregarJogadores();
-        } catch (erro) {
-            mostrarMensagem("Não foi possível excluir. " + erro.message, "erro");
-        }
-    }
-
-    carregarJogadores();
-</script>
+<dialog id="modalPatch" class="modal">
+    <form id="formPatch" method="dialog">
+        <div class="modal-heading">
+            <div><p class="eyebrow">EDIÇÃO PARCIAL · PATCH</p><h2>Atualizar informações</h2></div>
+            <button type="button" class="close-button" id="fecharModal" aria-label="Fechar">×</button>
+        </div>
+        <p class="modal-help">Preencha somente os campos que deseja alterar. Os campos vazios serão mantidos como estão.</p>
+        <input type="hidden" id="patchId">
+        <div class="form-grid">
+            <label class="field field-wide">Nome
+                <input id="patchNome" type="text" maxlength="100" placeholder="Não alterar">
+            </label>
+            <label class="field">Posição
+                <select id="patchPosicao">
+                    <option value="">Não alterar</option>
+                    <option value="GOLEIRO">Goleiro</option><option value="ZAGUEIRO">Zagueiro</option>
+                    <option value="LATERAL">Lateral</option><option value="VOLANTE">Volante</option>
+                    <option value="MEIA">Meia</option><option value="ATACANTE">Atacante</option>
+                </select>
+            </label>
+            <label class="field">Número da camisa
+                <input id="patchNumeroCamisa" type="number" min="1" max="99" placeholder="Não alterar">
+            </label>
+            <label class="field">Data de nascimento
+                <input id="patchDataNascimento" type="date">
+            </label>
+            <label class="field">Nacionalidade
+                <input id="patchNacionalidade" type="text" maxlength="60" placeholder="Não alterar">
+            </label>
+        </div>
+        <div class="form-actions">
+            <button class="button button-primary" type="submit">Salvar alterações</button>
+            <button class="button button-ghost" id="cancelarPatch" type="button">Cancelar</button>
+        </div>
+    </form>
+</dialog>
 </body>
 </html>
